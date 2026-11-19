@@ -79,9 +79,15 @@ a { color: inherit; }
 /* ─── Theme switch: circular reveal + icon morph ─── */
 ::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
 ::view-transition-new(root) { z-index: 2; }
-.theme-fade, .theme-fade *, .theme-fade *::before, .theme-fade *::after {
-  transition: background-color .5s var(--ease-io), color .5s var(--ease-io),
-              border-color .5s var(--ease-io), fill .5s var(--ease-io) !important;
+/* Freeze everything except the toggle icon so the reveal is a pure compositor animation */
+.theme-switching *:not(.theme-toggle, .theme-toggle *),
+.theme-switching *::before, .theme-switching *::after {
+  transition: none !important;
+  animation-play-state: paused !important;
+}
+.theme-fade body, .theme-fade .nav, .theme-fade .card, .theme-fade .glance,
+.theme-fade .panel, .theme-fade .skills, .theme-fade .contact {
+  transition: background-color .35s ease, color .35s ease, border-color .35s ease !important;
 }
 
 .theme-toggle {

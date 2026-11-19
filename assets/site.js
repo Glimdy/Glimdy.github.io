@@ -21,7 +21,7 @@
     if (!document.startViewTransition) {
       root.classList.add("theme-fade");
       applyTheme(next);
-      setTimeout(() => root.classList.remove("theme-fade"), 550);
+      setTimeout(() => root.classList.remove("theme-fade"), 400);
       return;
     }
 
@@ -30,12 +30,15 @@
     const y = e.clientY || r.top + r.height / 2;
     const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
 
-    document.startViewTransition(() => applyTheme(next)).ready.then(() => {
+    root.classList.add("theme-switching");
+    const vt = document.startViewTransition(() => applyTheme(next));
+    vt.ready.then(() => {
       root.animate(
         { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
-        { duration: 650, easing: "cubic-bezier(.65,0,.35,1)", pseudoElement: "::view-transition-new(root)" }
+        { duration: 520, easing: "cubic-bezier(.4, 0, .2, 1)", pseudoElement: "::view-transition-new(root)" }
       );
     });
+    vt.finished.finally(() => root.classList.remove("theme-switching"));
   });
 
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
