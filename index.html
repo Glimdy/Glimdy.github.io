@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Samuel McKenna</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Samuel McKenna, junior data scientist and AI engineer. Projects, experience and CV.">
+<meta property="og:title" content="Samuel McKenna — Data Science & AI">
+<meta property="og:description" content="Projects, experience and CV of Samuel McKenna, junior data scientist and AI engineer based in Vilnius.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%234F46E5'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Arial,sans-serif' font-weight='800' font-size='26' fill='white'%3ESM%3C/text%3E%3C/svg%3E">
+<script>
+  (function () {
+    var r = document.documentElement, t = null;
+    r.classList.add("js");
+    try { t = localStorage.getItem("theme"); } catch (e) {}
+    r.dataset.theme = t || r.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  /* ─── Hero ─── */
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    gap: 48px;
+    align-items: end;
+    padding-block: 80px 48px;
+  }
+  @media (max-width: 920px) { .hero { grid-template-columns: 1fr; gap: 40px; padding-block: 56px 32px; } }
+
+  .status {
+    display: inline-flex; align-items: center; gap: 10px;
+    font: 500 .8rem/1.3 var(--font-m);
+    color: var(--muted);
+    padding: 7px 12px 7px 10px;
+    border: 1px solid var(--border); border-radius: 999px;
+    background: var(--surface);
+    margin-bottom: 28px;
+  }
+  .pulse { position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); flex-shrink: 0; }
+  .pulse::after {
+    content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--ok);
+    animation: pulse 2.2s var(--ease-out) infinite;
+  }
+  @keyframes pulse { from { transform: scale(1); opacity: .6; } to { transform: scale(3); opacity: 0; } }
+
+  .hero-name {
+    font: 800 clamp(3.3rem, 9.5vw, 6.8rem)/.9 var(--font-d);
+    letter-spacing: -.05em;
+    margin-bottom: 24px;
+  }
+  .hero-name span { color: var(--accent); }
+  .hero-role {
+    font: 600 clamp(1.1rem, 2.4vw, 1.45rem)/1.3 var(--font-d);
+    letter-spacing: -.02em;
+    margin-bottom: 18px;
+  }
+  .hero-role em { font-style: normal; color: var(--muted); }
+  .hero-bio { color: var(--muted); font-size: 1.05rem; line-height: 1.75; max-width: 54ch; margin-bottom: 32px; }
+  .hero-ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .hero-ctas .sep { width: 1px; height: 28px; background: var(--border); margin-inline: 6px; }
+
+  .glance {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    box-shadow: 0 20px 50px -24px var(--shadow);
+  }
+  .glance dl { display: grid; gap: 0; }
+  .glance-row { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; padding-block: 13px; border-top: 1px solid var(--border); }
+  .glance-row:first-child { border-top: 0; padding-top: 4px; }
+  .glance dt { font: 500 .72rem/1.6 var(--font-m); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .glance dd { font-size: .9rem; line-height: 1.5; }
+  .glance dd small { display: block; color: var(--muted); font-size: .8rem; }
+  .glance a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .glance a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  /* ─── Project grid ─── */
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-flow: dense; gap: 16px; }
+  @media (max-width: 920px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 620px) { .grid { grid-template-columns: 1fr; } }
+
+  .card {
+    --c: var(--accent);
+    position: relative; isolation: isolate; overflow: hidden;
+    display: flex; flex-direction: column; gap: 18px;
+    padding: 24px;
+    min-height: 260px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    transition: transform .55s var(--ease-out), box-shadow .55s var(--ease-out), border-color .3s;
+  }
+  .card::before {
+    content: ""; position: absolute; inset: 0; z-index: -1;
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), color-mix(in srgb, var(--c) 16%, transparent), transparent 60%);
+    opacity: 0; transition: opacity .45s;
+  }
+  .card:hover { transform: translateY(-6px); border-color: color-mix(in srgb, var(--c) 50%, var(--border)); box-shadow: 0 28px 60px -20px var(--shadow); }
+  .card:hover::before { opacity: 1; }
+  .card.span2 { grid-column: span 2; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .9fr); gap: 28px; }
+  @media (max-width: 620px) { .card.span2 { grid-column: auto; grid-template-columns: 1fr; } }
+  .card-main { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+
+  .card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .card-icon {
+    width: 46px; height: 46px; border-radius: 12px; flex-shrink: 0;
+    display: grid; place-items: center;
+    background: color-mix(in srgb, var(--c) 14%, var(--surface));
+    color: var(--c);
+    transition: transform .55s var(--ease-out);
+  }
+  .card-icon img { width: 30px; height: 30px; border-radius: 8px; }
+  .card:hover .card-icon { transform: rotate(-6deg) scale(1.06); }
+  .card-kind { font: 500 .7rem/1 var(--font-m); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .card-name { font: 700 1.3rem/1.15 var(--font-d); letter-spacing: -.03em; margin-bottom: 8px; }
+  .card-desc { color: var(--muted); font-size: .92rem; line-height: 1.65; }
+  .card-foot { margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+  .card-go {
+    display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+    font-size: .85rem; font-weight: 600; color: var(--c);
+  }
+  .card-go svg { transition: transform .4s var(--ease-out); }
+  .card:hover .card-go svg { transform: translate(3px, -3px); }
+
+  /* Previews */
+  .pv { position: relative; border-radius: 12px; min-width: 0; align-self: stretch; }
+  .pv-gradus {
+    display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto 1fr; gap: 16px;
+    padding: 18px; background: var(--surface-2); border: 1px solid var(--border);
+  }
+  .pv-ring { width: 84px; height: 84px; grid-row: span 2; }
+  .pv-ring circle { fill: none; stroke-width: 8; }
+  .pv-ring .bg { stroke: var(--border); }
+  .pv-ring .fg {
+    stroke: var(--c); stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 34;
+    transform: rotate(-90deg); transform-origin: center; transition: stroke-dashoffset 1s var(--ease-out);
+  }
+  .card:hover .pv-ring .fg { stroke-dashoffset: 12; }
+  .pv-steps { display: flex; gap: 6px; align-items: center; }
+  .pv-steps i { flex: 1; height: 6px; border-radius: 6px; background: var(--border); transition: background-color .4s; }
+  .pv-steps i.on { background: color-mix(in srgb, var(--c) 70%, var(--surface)); }
+  .card:hover .pv-steps i.next { background: var(--c); }
+  .pv-bars { display: flex; align-items: flex-end; gap: 8px; min-height: 64px; }
+  .pv-bars b {
+    flex: 1; height: var(--h); border-radius: 5px 5px 2px 2px;
+    background: color-mix(in srgb, var(--c) 30%, var(--surface));
+    transform-origin: bottom; transform: scaleY(.85);
+    transition: transform .7s var(--ease-out), background-color .4s;
+  }
+  .pv-bars b:nth-child(2) { transition-delay: .05s; } .pv-bars b:nth-child(3) { transition-delay: .1s; }
+  .pv-bars b:nth-child(4) { transition-delay: .15s; } .pv-bars b:nth-child(5) { transition-delay: .2s; }
+  .card:hover .pv-bars b { transform: scaleY(1); background: color-mix(in srgb, var(--c) 55%, var(--surface)); }
+
+  .pv-ff { display: grid; gap: 8px; }
+  .pv-ff div {
+    display: flex; align-items: center; gap: 10px;
+    font: 500 .78rem/1 var(--font-m);
+    padding: 10px 12px; border-radius: 10px;
+    background: var(--surface-2); border: 1px solid var(--border); color: var(--muted);
+    transition: transform .5s var(--ease-out), border-color .3s;
+  }
+  .pv-ff div:nth-child(2) { transition-delay: .06s; } .pv-ff div:nth-child(3) { transition-delay: .12s; }
+  .pv-ff b { color: var(--fg); font-weight: 500; }
+  .pv-ff svg { color: var(--c); }
+  .card:hover .pv-ff div { transform: translateX(4px); border-color: color-mix(in srgb, var(--c) 35%, var(--border)); }
+
+  /* Extension popup replica: keeps its real dark look in both themes */
+  .pv-yt {
+    padding: 16px; color: #F4F4F7; font-size: 11px;
+    background: radial-gradient(circle at 100% 0%, rgba(173, 48, 191, .22), transparent 45%), #111116;
+    border: 1px solid #2A2733;
+    box-shadow: 0 18px 40px -20px rgba(0, 0, 0, .6);
+    display: grid; gap: 12px; align-content: start;
+  }
+  .yt-top { display: flex; align-items: center; gap: 9px; }
+  .yt-top img { width: 30px; height: 30px; border-radius: 9px; }
+  .yt-top b { display: block; font-size: 12.5px; }
+  .yt-top span { color: #92919D; font-size: 10px; }
+  .yt-top em { margin-left: auto; font-style: normal; font-weight: 700; font-size: 9.5px; padding: 4px 8px; border-radius: 20px; color: #8DE0AD; background: rgba(54, 155, 91, .15); }
+  .yt-mode { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .yt-mode span { text-align: center; padding: 8px 4px; border-radius: 8px; border: 1px solid #393543; background: #211F29; color: #BCB8C7; font-weight: 650; font-size: 10.5px; }
+  .yt-mode .sel { border-color: #B83BC4; background: rgba(168, 43, 192, .2); color: #FFF; }
+  .yt-ph { display: flex; justify-content: space-between; color: #D9D6E0; font-size: 10.5px; }
+  .yt-track { height: 6px; margin-top: 7px; border-radius: 20px; background: #302D39; overflow: hidden; }
+  .yt-track i { display: block; height: 100%; width: 64%; border-radius: inherit; background: linear-gradient(90deg, #A82BC0, #E34B86); transition: width 1.4s var(--ease-out); }
+  .card:hover .yt-track i { width: 96%; }
+
+  /* ─── Also built ─── */
+  .also { margin-top: 40px; }
+  .also-title { font: 600 .72rem/1 var(--font-m); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+  .also-list { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; }
+  @media (max-width: 720px) { .also-list { grid-template-columns: 1fr; } }
+  .also-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 16px; align-items: baseline; padding-block: 14px; border-top: 1px solid var(--border); }
+  .also-item h3 { font: 600 .98rem/1.35 var(--font-b); }
+  .also-item p { grid-column: 1 / -1; color: var(--muted); font-size: .875rem; }
+  .also-item .chip { justify-self: end; }
+
+  /* ─── Timeline ─── */
+  .tl-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 56px; }
+  @media (max-width: 900px) { .tl-grid { grid-template-columns: 1fr; gap: 40px; } }
+  .col-title { font: 700 1.05rem/1 var(--font-d); letter-spacing: -.02em; margin-bottom: 22px; color: var(--muted); }
+  .timeline { list-style: none; position: relative; display: grid; gap: 30px; padding-left: 26px; }
+  .timeline::before { content: ""; position: absolute; left: 5px; top: 8px; bottom: 8px; width: 2px; background: var(--border); border-radius: 2px; }
+  .tl-item { position: relative; }
+  .tl-item::before {
+    content: ""; position: absolute; left: -26px; top: 6px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--bg); border: 2px solid var(--accent);
+    transition: background-color .3s, transform .4s var(--ease-out);
+  }
+  .tl-item:hover::before { background: var(--accent); transform: scale(1.2); }
+  .tl-when { font: 500 .78rem/1 var(--font-m); color: var(--accent); margin-bottom: 8px; font-variant-numeric: tabular-nums; }
+  .tl-role { font: 700 1.15rem/1.25 var(--font-d); letter-spacing: -.02em; }
+  .tl-org { color: var(--muted); font-size: .9rem; margin-bottom: 12px; }
+  .tl-points { list-style: none; display: grid; gap: 7px; margin-bottom: 14px; }
+  .tl-points li { position: relative; padding-left: 16px; font-size: .92rem; line-height: 1.6; max-width: 68ch; }
+  .tl-points li::before { content: ""; position: absolute; left: 0; top: .7em; width: 6px; height: 2px; background: var(--muted); border-radius: 2px; }
+
+  /* ─── Skills ─── */
+  .skills { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); overflow: hidden; }
+  .skill-row { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 20px; align-items: center; padding: 18px 24px; border-top: 1px solid var(--border); }
+  .skill-row:first-child { border-top: 0; }
+  .skill-row h3 { font: 600 .95rem/1.3 var(--font-b); }
+  @media (max-width: 640px) { .skill-row { grid-template-columns: 1fr; gap: 10px; } }
+
+  .extra-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+  @media (max-width: 760px) { .extra-grid { grid-template-columns: 1fr; } }
+  .panel { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); padding: 22px 24px; }
+  .panel h3 { font: 600 .72rem/1 var(--font-m); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+  .lang { display: grid; grid-template-columns: 90px minmax(0, 1fr) 54px; gap: 12px; align-items: center; padding-block: 7px; font-size: .92rem; }
+  .cefr { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+  .cefr i { height: 6px; border-radius: 4px; background: var(--surface-2); border: 1px solid var(--border); }
+  .cefr i.on { background: var(--accent); border-color: var(--accent); }
+  .lang span:last-child { font: 500 .75rem/1 var(--font-m); color: var(--muted); text-align: right; }
+  .certs { list-style: none; display: grid; gap: 12px; }
+  .certs li { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 12px; font-size: .92rem; align-items: baseline; }
+  .certs b { font: 500 .78rem/1.4 var(--font-m); color: var(--accent); }
+
+  /* ─── Contact ─── */
+  .contact {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 40px; align-items: center;
+    padding: 40px; border-radius: 22px;
+    background:
+      radial-gradient(600px circle at 0% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 60%),
+      var(--surface);
+    border: 1px solid var(--border);
+  }
+  @media (max-width: 760px) { .contact { grid-template-columns: 1fr; padding: 28px 22px; } }
+  .contact .sec-title { margin-bottom: 12px; }
+  .contact-text { color: var(--muted); max-width: 52ch; margin-bottom: 24px; }
+  .email-row {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    padding: 8px 8px 8px 16px; border-radius: 12px;
+    background: var(--bg); border: 1px solid var(--border);
+    width: fit-content; max-width: 100%; margin-bottom: 18px;
+  }
+  .email-row a { font: 500 .95rem/1.3 var(--font-m); text-decoration: none; overflow-wrap: anywhere; }
+  .contact-links { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  .qr-card { display: grid; justify-items: center; gap: 12px; text-align: center; }
+  .qr {
+    width: 168px; height: 168px; padding: 12px; border-radius: 16px;
+    background: #FFFFFF; box-shadow: 0 16px 40px -18px var(--shadow);
+    border: 1px solid var(--border);
+    transition: transform .5s var(--ease-out);
+  }
+  .qr:hover { transform: scale(1.04) rotate(-1.5deg); }
+  .qr img, .qr canvas { width: 100% !important; height: 100% !important; }
+  .qr-cap { font: 500 .78rem/1.4 var(--font-m); color: var(--muted); }
+  .qr-cap b { display: block; color: var(--fg); font-family: var(--font-b); font-weight: 600; font-size: .85rem; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="c nav-row">
+    <a class="brand" href="#top">Samuel McKenna<span>.</span></a>
+    <div class="nav-links">
+      <a class="nav-link" href="#projects">Projects</a>
+      <a class="nav-link" href="#experience">Experience</a>
+      <a class="nav-link" href="#skills">Skills</a>
+      <a class="nav-link" href="#contact">Contact</a>
+    </div>
+    <div class="nav-right">
+      <a class="btn btn-primary btn-sm" href="cv/Samuel-McKenna-CV.pdf" target="_blank" rel="noopener">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+        CV
+      </a>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme">
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+          <mask id="tt-mask"><rect width="24" height="24" fill="#fff"/><circle class="tt-cut" cx="17" cy="7" r="7" fill="#000"/></mask>
+          <circle class="tt-core" cx="12" cy="12" r="5" fill="currentColor" mask="url(#tt-mask)"/>
+          <g class="tt-rays" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none">
+            <path d="M12 1.5v2.2M12 20.3v2.2M1.5 12h2.2M20.3 12h2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/>
+          </g>
+        </svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<header class="c hero" id="top">
+  <div>
+    <p class="status reveal" style="--d:0"><span class="pulse"></span>Open to full-time roles in AI &amp; data · Vilnius or remote</p>
+    <h1 class="hero-name reveal" style="--d:1">Samuel<br>McKenna<span>.</span></h1>
+    <p class="hero-role reveal" style="--d:2">Junior Data Scientist <em>&amp;</em> AI Engineer</p>
+    <p class="hero-bio reveal" style="--d:3">
+      I build AI and data tools end to end: retrieval pipelines over messy documents, geospatial analysis,
+      and web apps people actually use. Most recently I worked at EUROCONTROL on air traffic management
+      and aircraft trajectory data.
+    </p>
+    <div class="hero-ctas reveal" style="--d:4">
+      <a class="btn btn-primary" href="#projects">
+        View projects
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="btn btn-ghost" href="cv/Samuel-McKenna-CV.pdf" target="_blank" rel="noopener">Download CV</a>
+      <span class="sep" aria-hidden="true"></span>
+      <a class="icon-btn" href="https://github.com/Glimdy" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.7 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
+      </a>
+      <a class="icon-btn" href="https://www.linkedin.com/in/samuel-mckenna/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <aside class="glance reveal" style="--d:4" aria-label="At a glance">
+    <dl>
+      <div class="glance-row"><dt>Based in</dt><dd>Vilnius, Lithuania<small>Lithuanian residency · open to remote</small></dd></div>
+      <div class="glance-row"><dt>Latest</dt><dd>AI/Data Science Trainee, EUROCONTROL<small>Paris · Jul – Sep 2026</small></dd></div>
+      <div class="glance-row"><dt>Degree</dt><dd>BSc Artificial Intelligence<small>ESAIP School of Engineering · 2023 – 2026</small></dd></div>
+      <div class="glance-row"><dt>Languages</dt><dd>French &amp; English (native)<small>Spanish B1 · Japanese A1</small></dd></div>
+      <div class="glance-row"><dt>Freelance</dt><dd>Web, apps, AI and data<small><a href="cv/Samuel-McKenna-CV-Freelance.pdf" target="_blank" rel="noopener">Freelance CV</a></small></dd></div>
+    </dl>
+  </aside>
+</header>
+
+<main>
+  <section class="c section" id="projects">
+    <div class="sec-head reveal">
+      <div>
+        <p class="label">Work</p>
+        <h2 class="sec-title">Projects</h2>
+      </div>
+      <p class="sec-sub">Live apps open in a new tab. The extension runs locally, so it has its own page explaining how it works.</p>
+    </div>
+    <div class="grid" id="projectGrid"></div>
+
+    <div class="also">
+      <p class="also-title reveal">Also built</p>
+      <ul class="also-list" id="alsoList"></ul>
+    </div>
+  </section>
+
+  <section class="c section" id="experience">
+    <div class="sec-head reveal">
+      <div>
+        <p class="label">Background</p>
+        <h2 class="sec-title">Experience &amp; education</h2>
+      </div>
+    </div>
+    <div class="tl-grid">
+      <div>
+        <h3 class="col-title reveal">Experience</h3>
+        <ol class="timeline" id="expList"></ol>
+      </div>
+      <div>
+        <h3 class="col-title reveal">Education</h3>
+        <ol class="timeline" id="eduList"></ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="c section" id="skills">
+    <div class="sec-head reveal">
+      <div>
+        <p class="label">Toolkit</p>
+        <h2 class="sec-title">Skills</h2>
+      </div>
+    </div>
+    <div class="skills reveal" id="skillList"></div>
+    <div class="extra-grid">
+      <div class="panel reveal" style="--d:1">
+        <h3>Languages</h3>
+        <div id="langList"></div>
+      </div>
+      <div class="panel reveal" style="--d:2">
+        <h3>Certifications</h3>
+        <ul class="certs" id="certList"></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="c section" id="contact">
+    <div class="contact reveal">
+      <div>
+        <p class="label">Contact</p>
+        <h2 class="sec-title">Get in touch</h2>
+        <p class="contact-text">
+          I'm looking for a full-time role in AI, data science or machine learning, in Vilnius or remote.
+          I also take on freelance work: websites, apps, AI integrations and data projects.
+        </p>
+        <div class="email-row">
+          <a id="email" href="mailto:mckennasamuel21@gmail.com">mckennasamuel21@gmail.com</a>
+          <button class="btn btn-ghost btn-sm" type="button" data-copy="mckennasamuel21@gmail.com" data-copy-target="email">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+        <div class="contact-links">
+          <a class="btn btn-ghost btn-sm" href="https://www.linkedin.com/in/samuel-mckenna/" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="btn btn-ghost btn-sm" href="https://github.com/Glimdy" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn btn-ghost btn-sm" href="cv/Samuel-McKenna-CV.pdf" target="_blank" rel="noopener">CV</a>
+          <a class="btn btn-ghost btn-sm" href="cv/Samuel-McKenna-CV-Freelance.pdf" target="_blank" rel="noopener">Freelance CV</a>
+        </div>
+      </div>
+      <div class="qr-card">
+        <div class="qr" id="qr" role="img" aria-label="QR code linking to this portfolio"></div>
+        <p class="qr-cap"><b>Open on your phone</b><span id="qrUrl"></span></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="c footer-row">
+    <span>© <span data-year>2026</span> <strong>Samuel McKenna</strong></span>
+    <div class="footer-links">
+      <a href="https://github.com/Glimdy" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/samuel-mckenna/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="cv/Samuel-McKenna-CV.pdf" target="_blank" rel="noopener">CV</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   EDIT HERE. Every list on the page is rendered from this object.
+   To add a project, copy one block in `projects` and change it.
+   For a project with its own page, copy projects/yt-downloader.html
+   and point `url` at the new file with `internal: true`.
+   ═══════════════════════════════════════════════════════════════ */
+const CONFIG = {
+  siteUrl: "https://glimdy.github.io/",
+
+  projects: [
+    {
+      name: "Gradus",
+      kind: "Live web app",
+      desc: "A web app for tracking every step of your academic journey, with a dashboard that shows where you stand at a glance.",
+      tags: ["React", "Vite", "GitHub Pages"],
+      url: "https://glimdy.github.io/Gradus/#/dashboard",
+      color: "#14B8A6",
+      icon: "cap",
+      preview: "gradus",
+      span2: true,
+    },
+    {
+      name: "FileForge",
+      kind: "Live web app",
+      desc: "Converts images, documents, audio, video and data files right in the browser. Nothing is uploaded, so files never leave your device.",
+      tags: ["JavaScript", "FFmpeg.wasm", "pdf.js", "JSZip"],
+      url: "https://glimdy.github.io/FileForge/",
+      color: "#6C63FF",
+      icon: "convert",
+      preview: "fileforge",
+    },
+    {
+      name: "YT Downloader",
+      kind: "Browser extension",
+      desc: "An Opera GX extension that sends the current YouTube video or a whole playlist to yt-dlp on your machine, then merges the best video and audio streams with FFmpeg.",
+      tags: ["Manifest V3", "Python", "Native messaging", "yt-dlp"],
+      url: "projects/yt-downloader.html",
+      internal: true,
+      color: "#D63C83",
+      img: "assets/yt-downloader-icon.png",
+      preview: "yt",
+      span2: true,
+    },
+    {
+      name: "More on GitHub",
+      kind: "Repositories",
+      desc: "Smaller projects and coursework, including Java, Python and JavaScript apps.",
+      tags: [],
+      url: "https://github.com/Glimdy",
+      icon: "github",
+    },
+  ],
+
+  alsoBuilt: [
+    { name: "Car price estimation", desc: "Machine learning model that estimates automobile prices from vehicle data.", tag: "Scikit-Learn" },
+    { name: "Computer vision for autonomous driving", desc: "Experiments with perception models for self-driving scenarios.", tag: "OpenCV · CNNs" },
+    { name: "Reinforcement learning experiments", desc: "Training agents and comparing approaches in PyTorch.", tag: "PyTorch" },
+    { name: "AI apps on external APIs", desc: "Applications that connect language models to outside services.", tag: "APIs · LLMs" },
+    { name: "Chatbots & workflow automation", desc: "Conversational assistants and automations that remove repetitive work.", tag: "Python" },
+  ],
+
+  experience: [
+    {
+      when: "Jul – Sep 2026",
+      role: "AI/Data Science Trainee",
+      org: "EUROCONTROL · Paris, France",
+      points: [
+        "Worked on projects involving air traffic management, aircraft trajectories and aviation data.",
+        "Designed and built a full RAG pipeline for document question answering, from ingestion and text extraction to retrieval and LLM generation.",
+        "Worked with LLMs through Ollama and Claude Code, including prompt engineering and local model integration.",
+        "Integrated Tesseract OCR to extract information from document images and diagrams.",
+        "Built interactive data apps and visualisations for geospatial analysis.",
+      ],
+      tags: ["Python", "RAG", "Ollama", "Tesseract", "GeoPandas", "Shapely", "DuckDB", "Streamlit"],
+    },
+    {
+      when: "May – Jul 2025",
+      role: "Software/Data Intern",
+      org: "IT500 Solutions · Edinburgh, Scotland",
+      points: [
+        "Developed Python applications and worked with APIs.",
+        "Built and updated websites.",
+      ],
+      tags: ["Python", "APIs", "Web"],
+    },
+  ],
+
+  education: [
+    {
+      when: "2023 – 2026",
+      role: "Bachelor's in Artificial Intelligence",
+      org: "ESAIP School of Engineering · Angers, France",
+      points: ["Machine learning, deep learning, data integration, data visualisation, databases, DevOps, software development and project management."],
+    },
+    {
+      when: "Feb – Jun 2026",
+      role: "Erasmus semester in IT",
+      org: "Faculty of Management Science and Informatics · Žilina, Slovakia",
+      points: [],
+    },
+  ],
+
+  skills: [
+    { group: "Programming", items: ["Python", "SQL", "Java", "Dart", "JavaScript", "HTML", "CSS"] },
+    { group: "Machine learning & AI", items: ["Scikit-Learn", "TensorFlow", "PyTorch", "NumPy", "OpenCV", "NLP", "CNNs", "RAG", "LLMs"] },
+    { group: "Data science & visualisation", items: ["Pandas", "Matplotlib", "Seaborn", "Plotly", "GeoPandas", "Shapely"] },
+    { group: "Data & databases", items: ["SQL", "MongoDB", "MariaDB", "DuckDB", "Parquet"] },
+    { group: "Development & tools", items: ["Git", "Streamlit", "APIs", "Unity", "Blender", "Remote Linux machines"] },
+  ],
+
+  // level: number of CEFR steps filled (A1=1 … C2=6)
+  languages: [
+    { name: "French", level: 6, note: "Native" },
+    { name: "English", level: 6, note: "Native" },
+    { name: "Spanish", level: 3, note: "B1" },
+    { name: "Japanese", level: 1, note: "A1" },
+  ],
+
+  certifications: [
+    { issuer: "CNIL", name: "Data Protection & Privacy" },
+    { issuer: "ANSSI", name: "Cybersecurity Awareness" },
+    { issuer: "TOEFL", name: "English proficiency" },
+    { issuer: "TOEIC", name: "English proficiency" },
+  ],
+};
+/* ═════════════════════ End of editable section ═════════════════════ */
+
+const ICONS = {
+  cap: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5M22 10v6"/></svg>',
+  convert: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h15l-4-4M20 15H5l4 4"/></svg>',
+  github: '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.7 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>',
+  arrow: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>',
+};
+
+const PREVIEWS = {
+  gradus: `<div class="pv pv-gradus" aria-hidden="true">
+      <svg class="pv-ring" viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="32" pathLength="100"/><circle class="fg" cx="40" cy="40" r="32" pathLength="100"/></svg>
+      <div class="pv-steps"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="next"></i><i></i></div>
+      <div class="pv-bars"><b style="--h:52%"></b><b style="--h:74%"></b><b style="--h:63%"></b><b style="--h:90%"></b><b style="--h:80%"></b></div>
+    </div>`,
+  fileforge: `<div class="pv pv-ff" aria-hidden="true">
+      ${[["HEIC", "JPG"], ["DOCX", "PDF"], ["MP4", "GIF"]].map(([a, b]) =>
+        `<div><b>${a}</b><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><b>${b}</b></div>`).join("")}
+    </div>`,
+  yt: `<div class="pv pv-yt" aria-hidden="true">
+      <div class="yt-top"><img src="assets/yt-downloader-icon.png" alt=""><div><b>YT Downloader</b><span>Local video downloader</span></div><em>Ready</em></div>
+      <div class="yt-mode"><span>This video</span><span class="sel">Entire playlist</span></div>
+      <div><div class="yt-ph"><span>Downloading 3 of 6</span><b>64%</b></div><div class="yt-track"><i></i></div></div>
+    </div>`,
+};
+
+const $ = (id) => document.getElementById(id);
+const chips = (list) => list.length ? `<div class="chips">${list.map((t) => `<span class="chip">${t}</span>`).join("")}</div>` : "<span></span>";
+
+$("projectGrid").innerHTML = CONFIG.projects.map((p, i) => {
+  const icon = p.img ? `<img src="${p.img}" alt="">` : (ICONS[p.icon] || "");
+  const target = p.internal ? "" : ' target="_blank" rel="noopener"';
+  const main = `
+    <div class="card-main">
+      <div class="card-top"><div class="card-icon">${icon}</div><span class="card-kind">${p.kind}</span></div>
+      <div><h3 class="card-name">${p.name}</h3><p class="card-desc">${p.desc}</p></div>
+      ${!p.span2 && p.preview ? PREVIEWS[p.preview] : ""}
+      <div class="card-foot">${chips(p.tags)}<span class="card-go">${p.internal ? "Read more" : "Open"} ${ICONS.arrow}</span></div>
+    </div>`;
+  return `<a class="card reveal${p.span2 ? " span2" : ""}" href="${p.url}"${target}
+            style="--d:${i % 3};${p.color ? `--c:${p.color}` : ""}">
+            ${main}${p.span2 && p.preview ? PREVIEWS[p.preview] : ""}
+          </a>`;
+}).join("");
+
+$("alsoList").innerHTML = CONFIG.alsoBuilt.map((a, i) => `
+  <li class="also-item reveal" style="--d:${i % 2}">
+    <h3>${a.name}</h3><span class="chip">${a.tag}</span><p>${a.desc}</p>
+  </li>`).join("");
+
+const timeline = (list) => list.map((e, i) => `
+  <li class="tl-item reveal" style="--d:${i}">
+    <p class="tl-when">${e.when}</p>
+    <h4 class="tl-role">${e.role}</h4>
+    <p class="tl-org">${e.org}</p>
+    ${e.points.length ? `<ul class="tl-points">${e.points.map((pt) => `<li>${pt}</li>`).join("")}</ul>` : ""}
+    ${e.tags ? chips(e.tags) : ""}
+  </li>`).join("");
+$("expList").innerHTML = timeline(CONFIG.experience);
+$("eduList").innerHTML = timeline(CONFIG.education);
+
+$("skillList").innerHTML = CONFIG.skills.map((s) =>
+  `<div class="skill-row"><h3>${s.group}</h3>${chips(s.items)}</div>`).join("");
+
+$("langList").innerHTML = CONFIG.languages.map((l) => `
+  <div class="lang"><span>${l.name}</span>
+    <span class="cefr" aria-label="${l.note}">${[1, 2, 3, 4, 5, 6].map((n) => `<i class="${n <= l.level ? "on" : ""}"></i>`).join("")}</span>
+    <span>${l.note}</span></div>`).join("");
+
+$("certList").innerHTML = CONFIG.certifications.map((c) =>
+  `<li><b>${c.issuer}</b><span>${c.name}</span></li>`).join("");
+
+const liveUrl = /github\.io$/.test(location.hostname) ? location.origin + location.pathname.replace(/index\.html$/, "") : CONFIG.siteUrl;
+$("qrUrl").textContent = liveUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+  if (window.QRCode) {
+    new QRCode(document.getElementById("qr"), {
+      text: liveUrl, width: 288, height: 288,
+      colorDark: "#0B0D1A", colorLight: "#FFFFFF", correctLevel: QRCode.CorrectLevel.M,
+    });
+    document.getElementById("qr").removeAttribute("title");
+  }
+</script>
+<script src="assets/site.js"></script>
+</body>
+</html>
