@@ -93,39 +93,29 @@ a { color: inherit; }
   padding-right: max(20px, env(safe-area-inset-right, 0px));
 }
 
-/* ─── Theme switch: palette fade + icon morph ─── */
-/* Registered tokens animate on :root and everything inherits them, so the page recolours in
-   sync. Element-level transitions are paused meanwhile; the toggle icon keeps its morph.
-   Surfaces and borders fade over the whole switch. Text swaps in a single frame at the midpoint,
-   when the background is mid-grey and both the old and the new text colour read clearly on it.
-   Fading text at the same pace would make it pass through the shade of the background, so it
-   would briefly vanish and reappear. */
+/* ─── Theme switch: snapshot dissolve + icon morph ─── */
+/* The browser snapshots the page before and after the switch and dissolves one into the other
+   (View Transitions). It is one image fading over another on the GPU, so nothing on the page
+   recolours piece by piece: no element can flicker or lag behind the rest.
+   The old snapshot stays opaque underneath while the new one fades in on top, so there is no dip
+   in brightness halfway. Element transitions are paused so the new view holds still while it
+   fades in; the toggle icon keeps its morph. */
 .theme-fade *:not(.theme-toggle svg, .theme-toggle svg *),
 .theme-fade *::before, .theme-fade *::after { transition: none !important; }
 
-:root.theme-fade {
-  --sw: .4s; --sw-ease: cubic-bezier(.45, 0, .55, 1);
-  transition:
-    --bg var(--sw) var(--sw-ease), --surface var(--sw) var(--sw-ease),
-    --surface-2 var(--sw) var(--sw-ease), --accent-dim var(--sw) var(--sw-ease),
-    --accent var(--sw) var(--sw-ease), --accent-solid var(--sw) var(--sw-ease),
-    --ok var(--sw) var(--sw-ease), --shadow var(--sw) var(--sw-ease),
-    --fg 0s linear calc(var(--sw) / 2), --muted 0s linear calc(var(--sw) / 2);
+::view-transition-group(root) { animation-duration: .45s; }
+::view-transition-old(root) { animation: none; }
+::view-transition-new(root) {
+  animation: theme-dissolve .45s cubic-bezier(.4, 0, .2, 1) both;
+  mix-blend-mode: normal;
 }
-/* Outlines are darker than their surface in light mode and lighter in dark mode, so a straight
-   fade flips them mid-switch. Instead they fade out, stay hidden while the surfaces change,
-   then fade back in already in the new theme's colour. */
-:root.theme-fade.to-dark  { animation: line-to-dark  var(--sw) linear; }
-:root.theme-fade.to-light { animation: line-to-light var(--sw) linear; }
-@keyframes line-to-dark {
-  0%       { --border: #DFE2EE; animation-timing-function: ease-out; }
-  35%, 65% { --border: transparent; animation-timing-function: ease-in; }
-  100%     { --border: #222639; }
-}
-@keyframes line-to-light {
-  0%       { --border: #222639; animation-timing-function: ease-out; }
-  35%, 65% { --border: transparent; animation-timing-function: ease-in; }
-  100%     { --border: #DFE2EE; }
+@keyframes theme-dissolve { from { opacity: 0; } }
+
+/* Browsers without View Transitions fade the whole palette together instead. */
+:root.theme-blend {
+  transition: --bg .35s ease, --surface .35s ease, --surface-2 .35s ease, --border .35s ease,
+              --fg .35s ease, --muted .35s ease, --accent .35s ease, --accent-dim .35s ease,
+              --accent-solid .35s ease, --ok .35s ease, --shadow .35s ease;
 }
 
 .theme-toggle {
