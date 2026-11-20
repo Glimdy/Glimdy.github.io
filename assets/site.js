@@ -20,24 +20,9 @@
     if (reduced) return applyTheme(next);
     clearTimeout(fadeTimer);
     root.classList.add("theme-fade");
-
-    if (!document.startViewTransition) {
-      root.classList.add("theme-blend");
-      applyTheme(next);
-      fadeTimer = setTimeout(() => root.classList.remove("theme-fade", "theme-blend"), 260);
-      return;
-    }
-
-    // Circle grows from the toggle to the farthest corner of the viewport.
-    const b = toggle.getBoundingClientRect();
-    const x = b.left + b.width / 2, y = b.top + b.height / 2;
-    const r = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-    const vt = document.startViewTransition(() => applyTheme(next));
-    vt.ready.then(() => root.animate(
-      { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${r}px at ${x}px ${y}px)`] },
-      { duration: 520, easing: "cubic-bezier(.65, 0, .35, 1)", pseudoElement: "::view-transition-new(root)" }
-    )).catch(() => {});
-    vt.finished.finally(() => root.classList.remove("theme-fade"));
+    applyTheme(next);
+    // Keep the class until the palette has settled (0.4s) so element transitions stay paused.
+    fadeTimer = setTimeout(() => root.classList.remove("theme-fade"), 480);
   });
 
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {

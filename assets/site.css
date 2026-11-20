@@ -11,6 +11,7 @@
 @property --accent     { syntax: "<color>"; inherits: true; initial-value: #4F46E5; }
 @property --accent-dim { syntax: "<color>"; inherits: true; initial-value: #ECEDFF; }
 @property --accent-fg  { syntax: "<color>"; inherits: true; initial-value: #FFFFFF; }
+@property --accent-solid { syntax: "<color>"; inherits: true; initial-value: #4F46E5; }
 @property --ok         { syntax: "<color>"; inherits: true; initial-value: #16A34A; }
 @property --shadow     { syntax: "<color>"; inherits: true; initial-value: rgba(16, 20, 48, .08); }
 
@@ -24,6 +25,7 @@
   --accent:     #4F46E5;
   --accent-dim: #ECEDFF;
   --accent-fg:  #FFFFFF;
+  --accent-solid: #4F46E5;  /* filled buttons: white text stays readable in both themes */
   --ok:         #16A34A;
   --shadow:     rgba(16, 20, 48, .08);
 
@@ -47,7 +49,7 @@
     --muted:      #8A93AB;
     --accent:     #7C83FF;
     --accent-dim: #1A1C3D;
-    --accent-fg:  #0B0D1A;
+    --accent-solid: #5D5FEF;
     --ok:         #4ADE80;
     --shadow:     rgba(0, 0, 0, .45);
     color-scheme: dark;
@@ -62,7 +64,7 @@
   --muted:      #8A93AB;
   --accent:     #7C83FF;
   --accent-dim: #1A1C3D;
-  --accent-fg:  #0B0D1A;
+  --accent-solid: #5D5FEF;
   --ok:         #4ADE80;
   --shadow:     rgba(0, 0, 0, .45);
   color-scheme: dark;
@@ -82,7 +84,7 @@ body {
 img { max-width: 100%; display: block; }
 a { color: inherit; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
-::selection { background: var(--accent); color: var(--accent-fg); }
+::selection { background: var(--accent-solid); color: var(--accent-fg); }
 
 .c {
   max-width: 1160px;
@@ -91,20 +93,25 @@ a { color: inherit; }
   padding-right: max(20px, env(safe-area-inset-right, 0px));
 }
 
-/* ─── Theme switch: circular wipe + icon morph ─── */
-/* The new theme is revealed in a circle growing from the toggle (View Transitions). Each pixel
-   switches once, from old to new, so text and borders never pass through a low-contrast midpoint
-   the way a colour fade does. Element transitions are paused so the new view is static while it
-   is revealed; the toggle icon keeps its morph. */
+/* ─── Theme switch: palette fade + icon morph ─── */
+/* Registered tokens animate on :root and everything inherits them, so the page recolours in
+   sync. Element-level transitions are paused meanwhile; the toggle icon keeps its morph.
+   Surfaces and borders fade over the whole switch. Text swaps in a single frame at the midpoint,
+   when the background is mid-grey and both the old and the new text colour read clearly on it.
+   Fading text at the same pace would make it pass through the shade of the background, so it
+   would briefly vanish and reappear. */
 .theme-fade *:not(.theme-toggle svg, .theme-toggle svg *),
 .theme-fade *::before, .theme-fade *::after { transition: none !important; }
-::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
 
-/* Browsers without View Transitions get a short palette fade instead. */
-:root.theme-blend {
-  transition: --bg .22s ease, --surface .22s ease, --surface-2 .22s ease, --border .22s ease,
-              --fg .22s ease, --muted .22s ease, --accent .22s ease, --accent-dim .22s ease,
-              --accent-fg .22s ease, --ok .22s ease, --shadow .22s ease;
+:root.theme-fade {
+  --sw: .4s; --sw-ease: cubic-bezier(.45, 0, .55, 1);
+  transition:
+    --bg var(--sw) var(--sw-ease), --surface var(--sw) var(--sw-ease),
+    --surface-2 var(--sw) var(--sw-ease), --accent-dim var(--sw) var(--sw-ease),
+    --accent var(--sw) var(--sw-ease), --accent-solid var(--sw) var(--sw-ease),
+    --ok var(--sw) var(--sw-ease), --shadow var(--sw) var(--sw-ease),
+    --border var(--sw) var(--sw-ease),
+    --fg 0s linear calc(var(--sw) / 2), --muted 0s linear calc(var(--sw) / 2);
 }
 
 .theme-toggle {
@@ -176,8 +183,8 @@ a { color: inherit; }
 .btn svg { flex-shrink: 0; transition: transform .3s var(--ease-out); }
 .btn:hover { transform: translateY(-2px); }
 .btn:active { transform: translateY(0) scale(.98); }
-.btn-primary { background: var(--accent); color: var(--accent-fg); box-shadow: 0 4px 14px color-mix(in srgb, var(--accent) 30%, transparent); }
-.btn-primary:hover { box-shadow: 0 10px 30px color-mix(in srgb, var(--accent) 40%, transparent); }
+.btn-primary { background: var(--accent-solid); color: var(--accent-fg); box-shadow: 0 4px 14px color-mix(in srgb, var(--accent-solid) 30%, transparent); }
+.btn-primary:hover { box-shadow: 0 10px 30px color-mix(in srgb, var(--accent-solid) 40%, transparent); }
 .btn-primary:hover svg { transform: translateX(3px); }
 .btn-ghost { background: var(--surface); color: var(--fg); border-color: var(--border); }
 .btn-ghost:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
