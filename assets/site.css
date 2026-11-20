@@ -110,8 +110,22 @@ a { color: inherit; }
     --surface-2 var(--sw) var(--sw-ease), --accent-dim var(--sw) var(--sw-ease),
     --accent var(--sw) var(--sw-ease), --accent-solid var(--sw) var(--sw-ease),
     --ok var(--sw) var(--sw-ease), --shadow var(--sw) var(--sw-ease),
-    --border var(--sw) var(--sw-ease),
     --fg 0s linear calc(var(--sw) / 2), --muted 0s linear calc(var(--sw) / 2);
+}
+/* Outlines are darker than their surface in light mode and lighter in dark mode, so a straight
+   fade flips them mid-switch. Instead they fade out, stay hidden while the surfaces change,
+   then fade back in already in the new theme's colour. */
+:root.theme-fade.to-dark  { animation: line-to-dark  var(--sw) linear; }
+:root.theme-fade.to-light { animation: line-to-light var(--sw) linear; }
+@keyframes line-to-dark {
+  0%       { --border: #DFE2EE; animation-timing-function: ease-out; }
+  35%, 65% { --border: transparent; animation-timing-function: ease-in; }
+  100%     { --border: #222639; }
+}
+@keyframes line-to-light {
+  0%       { --border: #222639; animation-timing-function: ease-out; }
+  35%, 65% { --border: transparent; animation-timing-function: ease-in; }
+  100%     { --border: #DFE2EE; }
 }
 
 .theme-toggle {

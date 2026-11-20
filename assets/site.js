@@ -19,10 +19,11 @@
     const next = root.dataset.theme === "dark" ? "light" : "dark";
     if (reduced) return applyTheme(next);
     clearTimeout(fadeTimer);
-    root.classList.add("theme-fade");
+    root.classList.remove("to-dark", "to-light");
+    root.classList.add("theme-fade", "to-" + next);
     applyTheme(next);
     // Keep the class until the palette has settled (0.4s) so element transitions stay paused.
-    fadeTimer = setTimeout(() => root.classList.remove("theme-fade"), 480);
+    fadeTimer = setTimeout(() => root.classList.remove("theme-fade", "to-dark", "to-light"), 480);
   });
 
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
