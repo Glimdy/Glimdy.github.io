@@ -49,8 +49,9 @@
   }
   @keyframes pulse { from { transform: scale(1); opacity: .6; } to { transform: scale(3); opacity: 0; } }
 
+  .hero-text { min-width: 0; container-type: inline-size; }
   .hero-name {
-    font: 800 clamp(3.3rem, 9.5vw, 6.8rem)/.9 var(--font-d);
+    font: 800 clamp(2.2rem, 12cqi, 6.6rem)/.9 var(--font-d);
     letter-spacing: -.05em;
     margin-bottom: 24px;
   }
@@ -308,7 +309,7 @@
 </nav>
 
 <header class="c hero" id="top">
-  <div>
+  <div class="hero-text">
     <p class="status reveal" style="--d:0"><span class="pulse"></span>Open to full-time roles in AI &amp; data · Vilnius or remote</p>
     <h1 class="hero-name reveal" style="--d:1">Samuel<br>McKenna<span>.</span></h1>
     <p class="hero-role reveal" style="--d:2">Junior Data Scientist <em>&amp;</em> AI Engineer</p>
@@ -456,8 +457,8 @@ const CONFIG = {
     {
       name: "Gradus",
       kind: "Live web app",
-      desc: "A web app for tracking every step of your academic journey, with a dashboard that shows where you stand at a glance.",
-      tags: ["React", "Vite", "GitHub Pages"],
+      desc: "A university application tracker I built for my own Master's search: map, table and dashboard views of every programme, deadlines synced to Google Calendar, and an AI assistant that fills in a programme's details from its web page.",
+      tags: ["React", "Firebase", "LLM APIs"],
       url: "https://glimdy.github.io/Gradus/#/dashboard",
       color: "#14B8A6",
       icon: "cap",

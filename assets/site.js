@@ -14,32 +14,15 @@
     label();
   }
 
-  toggle?.addEventListener("click", (e) => {
+  toggle?.addEventListener("click", () => {
     const next = root.dataset.theme === "dark" ? "light" : "dark";
     if (reduced) return applyTheme(next);
-
-    if (!document.startViewTransition) {
-      root.classList.add("theme-fade");
-      applyTheme(next);
-      setTimeout(() => root.classList.remove("theme-fade"), 400);
-      return;
-    }
-
-    const r = toggle.getBoundingClientRect();
-    const x = e.clientX || r.left + r.width / 2;
-    const y = e.clientY || r.top + r.height / 2;
-    const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-
-    root.classList.add("theme-switching");
-    const vt = document.startViewTransition(() => applyTheme(next));
-    vt.ready.then(() => {
-      root.animate(
-        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
-        { duration: 520, easing: "cubic-bezier(.4, 0, .2, 1)", pseudoElement: "::view-transition-new(root)" }
-      );
-    });
-    vt.finished.finally(() => root.classList.remove("theme-switching"));
+    clearTimeout(fadeTimer);
+    root.classList.add("theme-fade");
+    applyTheme(next);
+    fadeTimer = setTimeout(() => root.classList.remove("theme-fade"), 350);
   });
+  let fadeTimer;
 
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
     let saved = null;

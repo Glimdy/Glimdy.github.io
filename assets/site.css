@@ -1,5 +1,23 @@
-/* Layout: sticky glass nav · asymmetric hero · bento project grid · two-column timeline */
+/* Layout: sticky nav · asymmetric hero · bento project grid · two-column timeline */
+
+/* Registered colour tokens can be animated, so a theme switch fades the palette itself
+   and every colour derived from it (text, borders, SVG strokes, shadows) moves in sync. */
+@property --bg         { syntax: "<color>"; inherits: true; initial-value: #F4F5FA; }
+@property --surface    { syntax: "<color>"; inherits: true; initial-value: #FFFFFF; }
+@property --surface-2  { syntax: "<color>"; inherits: true; initial-value: #ECEEF6; }
+@property --border     { syntax: "<color>"; inherits: true; initial-value: #DFE2EE; }
+@property --fg         { syntax: "<color>"; inherits: true; initial-value: #0B0D1A; }
+@property --muted      { syntax: "<color>"; inherits: true; initial-value: #5D6680; }
+@property --accent     { syntax: "<color>"; inherits: true; initial-value: #4F46E5; }
+@property --accent-dim { syntax: "<color>"; inherits: true; initial-value: #ECEDFF; }
+@property --accent-fg  { syntax: "<color>"; inherits: true; initial-value: #FFFFFF; }
+@property --ok         { syntax: "<color>"; inherits: true; initial-value: #16A34A; }
+@property --shadow     { syntax: "<color>"; inherits: true; initial-value: rgba(16, 20, 48, .08); }
+
 :root {
+  transition: --bg .3s ease, --surface .3s ease, --surface-2 .3s ease, --border .3s ease,
+              --fg .3s ease, --muted .3s ease, --accent .3s ease, --accent-dim .3s ease,
+              --accent-fg .3s ease, --ok .3s ease, --shadow .3s ease;
   --bg:         #F4F5FA;
   --surface:    #FFFFFF;
   --surface-2:  #ECEEF6;
@@ -77,18 +95,10 @@ a { color: inherit; }
 }
 
 /* ─── Theme switch: circular reveal + icon morph ─── */
-::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
-::view-transition-new(root) { z-index: 2; }
-/* Freeze everything except the toggle icon so the reveal is a pure compositor animation */
-.theme-switching *:not(.theme-toggle, .theme-toggle *),
-.theme-switching *::before, .theme-switching *::after {
-  transition: none !important;
-  animation-play-state: paused !important;
-}
-.theme-fade body, .theme-fade .nav, .theme-fade .card, .theme-fade .glance,
-.theme-fade .panel, .theme-fade .skills, .theme-fade .contact {
-  transition: background-color .35s ease, color .35s ease, border-color .35s ease !important;
-}
+/* While the palette fades, element-level colour transitions would lag behind it, so pause them.
+   The toggle icon keeps its morph. */
+.theme-fade *:not(.theme-toggle svg, .theme-toggle svg *),
+.theme-fade *::before, .theme-fade *::after { transition: none !important; }
 
 .theme-toggle {
   width: 38px; height: 38px;
@@ -117,9 +127,7 @@ a { color: inherit; }
   position: sticky;
   top: env(safe-area-inset-top, 0px);
   z-index: 50;
-  background: color-mix(in srgb, var(--bg) 78%, transparent);
-  backdrop-filter: blur(18px) saturate(1.6);
-  -webkit-backdrop-filter: blur(18px) saturate(1.6);
+  background: var(--bg);
   border-bottom: 1px solid transparent;
   transition: border-color .3s, box-shadow .3s;
 }
@@ -199,10 +207,10 @@ a { color: inherit; }
 
 /* ─── Reveal on scroll ─── */
 @media (prefers-reduced-motion: no-preference) {
-  .js .reveal { opacity: 0; transform: translateY(18px); filter: blur(4px); }
+  .js .reveal { opacity: 0; transform: translateY(18px); }
   .js .reveal.in {
-    opacity: 1; transform: none; filter: none;
-    transition: opacity .8s var(--ease-out), transform .8s var(--ease-out), filter .8s var(--ease-out);
+    opacity: 1; transform: none;
+    transition: opacity .8s var(--ease-out), transform .8s var(--ease-out);
     transition-delay: calc(var(--d, 0) * 70ms);
   }
 }
