@@ -15,9 +15,6 @@
 @property --shadow     { syntax: "<color>"; inherits: true; initial-value: rgba(16, 20, 48, .08); }
 
 :root {
-  transition: --bg .3s ease, --surface .3s ease, --surface-2 .3s ease, --border .3s ease,
-              --fg .3s ease, --muted .3s ease, --accent .3s ease, --accent-dim .3s ease,
-              --accent-fg .3s ease, --ok .3s ease, --shadow .3s ease;
   --bg:         #F4F5FA;
   --surface:    #FFFFFF;
   --surface-2:  #ECEEF6;
@@ -94,11 +91,21 @@ a { color: inherit; }
   padding-right: max(20px, env(safe-area-inset-right, 0px));
 }
 
-/* ─── Theme switch: circular reveal + icon morph ─── */
-/* While the palette fades, element-level colour transitions would lag behind it, so pause them.
-   The toggle icon keeps its morph. */
+/* ─── Theme switch: circular wipe + icon morph ─── */
+/* The new theme is revealed in a circle growing from the toggle (View Transitions). Each pixel
+   switches once, from old to new, so text and borders never pass through a low-contrast midpoint
+   the way a colour fade does. Element transitions are paused so the new view is static while it
+   is revealed; the toggle icon keeps its morph. */
 .theme-fade *:not(.theme-toggle svg, .theme-toggle svg *),
 .theme-fade *::before, .theme-fade *::after { transition: none !important; }
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+
+/* Browsers without View Transitions get a short palette fade instead. */
+:root.theme-blend {
+  transition: --bg .22s ease, --surface .22s ease, --surface-2 .22s ease, --border .22s ease,
+              --fg .22s ease, --muted .22s ease, --accent .22s ease, --accent-dim .22s ease,
+              --accent-fg .22s ease, --ok .22s ease, --shadow .22s ease;
+}
 
 .theme-toggle {
   width: 38px; height: 38px;
@@ -117,7 +124,7 @@ a { color: inherit; }
 .tt-cut  { transform: translate(9px, -9px); transition: transform .6s var(--ease-out); }
 .tt-rays { transform-box: view-box; transform-origin: 12px 12px;
            transition: transform .6s var(--ease-out), opacity .35s var(--ease-out); }
-[data-theme="dark"] .theme-toggle svg { transform: rotate(-35deg); }
+[data-theme="dark"] .theme-toggle svg { transform: rotate(45deg); }
 [data-theme="dark"] .tt-core { r: 8.5px; }
 [data-theme="dark"] .tt-cut  { transform: translate(0, 0); }
 [data-theme="dark"] .tt-rays { transform: rotate(90deg) scale(0); opacity: 0; }
